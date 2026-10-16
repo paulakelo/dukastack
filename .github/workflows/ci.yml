@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    name: Lint, Test & Validate Warehouse
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[dev]"
+          dbt deps --project-dir dbt --profiles-dir dbt
+
+      - name: Lint Python (ruff)
+        run: ruff check .
+
+      - name: Lint SQL (sqlfluff)
+        run: sqlfluff lint dbt/models
+
+      - name: Run Python unit tests
+        run: pytest tests/
+
+      - name: Generate synthetic POS history (seeded)
+        run: python -m simulator.cli generate --days 30 --seed 42
+
+      - name: Advance source by 3 days
+        run: |
+          for i in {1..3}; do
+            python -m simulator.cli advance
+          done
+
+      - name: First dbt build
+        run: dbt build --project-dir dbt --profiles-dir dbt
+
+      - name: Second dbt build (idempotency check)
+        run: |
+          # A second build with no new source data should make zero changes
+          dbt build --project-dir dbt --profiles-dir dbt
+
+      - name: Verify chaos scenarios (C1-C6)
+        run: make chaos

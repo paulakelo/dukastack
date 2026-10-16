@@ -1,0 +1,37 @@
+# DuckDB data files and state
+data/*.duckdb*
+data/*.json
+data/*.parquet
+data/*.csv
+!data/.gitkeep
+
+# dbt artifacts
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Python virtual environment and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+.env
+
+# Testing and linting
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Dagster local storage
+.dagster/
+dagster_home/
+
+# System / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
