@@ -1,4 +1,4 @@
-# dukastack 🛒🇰🇪
+# dukastack 
 
 [![CI](https://github.com/paulakelo/dukastack/actions/workflows/ci.yml/badge.svg)](https://github.com/paulakelo/dukastack/actions/workflows/ci.yml)
 [![Docs](https://img.shields.io/badge/dbt--docs-GitHub%20Pages-blue)](https://paulakelo.github.io/dukastack/)
@@ -8,7 +8,6 @@
 
 A local, zero-cost analytics warehouse for point-of-sale data from a fictional chain of Kenyan *duka* (small retail shops), built with **dbt**, **DuckDB**, and **Dagster**.
 
-dukastack exists to prove one critical skill often faked in data portfolios: **slowly changing dimensions (SCD Type 2) that remain strictly correct when prices and loyalty tiers change**, backed by automated boundary tests and deliberately injected chaos scenarios.
 
 ---
 
@@ -155,4 +154,4 @@ left join {{ ref('dim_products') }} p
 
 ## License
 
-MIT License. Designed and maintained by [@Paul Grant](https://github.com/paulakelo).
+MIT License. 
