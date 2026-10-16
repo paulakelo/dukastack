@@ -35,3 +35,10 @@ dagster_home/
 .idea/
 .vscode/
 *.swp
+docs/adr/0001-duckdb-over-postgres.md
+docs/adr/0002-timestamp-snapshot-strategy.md
+.gitignore
+docs/adr/0003-refunds-as-separate-fact.md
+.gitignore
+.gitignore
+docs/adr/0004-retroactive-price-changes.md
