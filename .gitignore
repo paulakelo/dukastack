@@ -36,6 +36,10 @@ dagster_home/
 .vscode/
 *.swp
 
-# Local developer checklist & internal notes
+# Local developer checklist, breakdown & internal notes
 checklist.md
 CHECKLIST.md
+breakdown.md
+BREAKDOWN.md
+LEARNER_GUIDE.md
+learner_guide.md
