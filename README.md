@@ -108,56 +108,58 @@ left join {{ ref('dim_products') }} p
 
 ```text
 dukastack/
-├── README.md                    # Project overview, features, architecture, and repo structure
-├── Makefile                     # Developer commands (setup, demo, build, chaos, docs, dagster, lint, test)
-├── pyproject.toml               # Pinned Python package dependencies and tool configurations
-├── .sqlfluff                    # SQLFluff linter settings for DuckDB dialect and dbt templating
-├── .pre-commit-config.yaml      # Git pre-commit hooks for formatting and linting
-├── .gitignore                   # Local data files and dbt build target exclusions
+├── README.md
+├── LICENSE
+├── Makefile
+├── pyproject.toml
+├── .sqlfluff
+├── .pre-commit-config.yaml
+├── .gitignore
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml               # PR validation: linting, pytest, seeded dbt build, idempotency, chaos suite
-│       └── docs.yml             # Main branch deployment of dbt docs to GitHub Pages
+│       ├── ci.yml
+│       └── docs.yml
 ├── docs/
-│   ├── requirements.md          # Full project functional and non-functional specifications
-│   ├── architecture.md          # Deep dive into layers, contracts, and technology decisions
-│   ├── chaos-scenarios.md       # Detailed guide to injected chaos scenarios C1-C6
-│   ├── adr/                     # Architectural Decision Records
+│   ├── requirements.md
+│   ├── architecture.md
+│   ├── chaos-scenarios.md
+│   ├── adr/
 │   │   ├── 0001-duckdb-over-postgres.md
 │   │   ├── 0002-timestamp-snapshot-strategy.md
 │   │   ├── 0003-refunds-as-separate-fact.md
 │   │   └── 0004-retroactive-price-changes.md
 │   └── queries/
-│       └── price_and_tier_at_sale.sql  # Saved query demonstrating historical price/tier reconstruction
-├── simulator/                   # Synthetic retail POS generator and chaos injector
-│   ├── cli.py                   # Simulator CLI: generate, advance, chaos
-│   ├── config.py                # Simulation seed, shops catalog, product catalog, daily rates
-│   ├── generate.py              # Baseline historical data generation
-│   ├── mutate.py                # Daily progression: tier updates, price changes, orders, refunds
-│   ├── chaos.py                 # Scenarios C1 to C6 corruption injectors
-│   └── loader.py                # Ingestion into DuckDB raw schema with _loaded_at stamps
-├── dbt/                         # dbt transformation project
-│   ├── dbt_project.yml          # dbt project definition and model materializations
-│   ├── profiles.yml             # DuckDB connection profile via environment variable
-│   ├── packages.yml             # External dbt packages (dbt_utils, dbt_expectations, dbt_project_evaluator)
+│       └── price_and_tier_at_sale.sql
+├── simulator/
+│   ├── cli.py
+│   ├── config.py
+│   ├── generate.py
+│   ├── mutate.py
+│   ├── chaos.py
+│   └── loader.py
+├── dbt/
+│   ├── dbt_project.yml
+│   ├── profiles.yml
+│   ├── packages.yml
 │   ├── models/
-│   │   ├── sources.yml          # Raw table definitions and freshness thresholds
-│   │   ├── staging/             # 1-to-1 views on raw tables (stg_shops, stg_customers, stg_orders, etc.)
-│   │   ├── core/                # Star schema: dim_*, fct_order_items, fct_refunds, boundary unit tests
-│   │   └── marts/               # Business reporting marts (mrt_daily_sales, mrt_product_perf, mrt_tier_moves)
-│   ├── snapshots/               # SCD Type 2 snapshot definitions (snap_customers, snap_products)
-│   ├── macros/                  # Custom SQL macros (as_of_join.sql)
-│   └── tests/singular/          # Business logic and reconciliation tests (assert_scd2_no_overlap, etc.)
-├── orchestration/               # Dagster asset definitions and orchestration pipelines
+│   │   ├── sources.yml
+│   │   ├── staging/
+│   │   ├── core/
+│   │   └── marts/
+│   ├── snapshots/
+│   ├── macros/
+│   └── tests/
+│       └── singular/
+├── orchestration/
 │   └── dukastack_dagster/
-│       ├── definitions.py       # Dagster definitions entry point
-│       ├── assets.py            # Software-defined assets for simulator and dbt models
-│       ├── checks.py            # Row count reconciliation and snapshot freshness checks
-│       └── schedules.py         # Daily automated pipeline schedule
-├── tests/                       # Python test suite
-│   ├── test_determinism.py      # Verifies simulator output reproducibility under fixed seeds
-│   └── test_chaos.py            # Verifies that each chaos scenario is caught by its intended test
-└── data/                        # Local DuckDB database and simulator state (gitignored)
+│       ├── definitions.py
+│       ├── assets.py
+│       ├── checks.py
+│       └── schedules.py
+├── tests/
+│   ├── test_determinism.py
+│   └── test_chaos.py
+└── data/
 ```
 
 ---
