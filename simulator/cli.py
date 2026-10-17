@@ -83,7 +83,7 @@ def main() -> None:
         for _ in range(args.days):
             advance_day(state, rng)
         save_state(state, state_path=args.state)
-        write_raw_database(args.db, state, loaded_at=state["sim_time"])
+        write_raw_database(args.db, state)
         print(
             f"Advanced to {state['sim_time']}. Total orders: {len(state['orders'])}, "
             f"refunds: {len(state['refunds'])}"

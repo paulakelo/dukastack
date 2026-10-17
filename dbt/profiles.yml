@@ -3,5 +3,5 @@ dukastack:
   outputs:
     dev:
       type: duckdb
-      path: "{{ env_var('DUKASTACK_DB_PATH', '../data/dukastack.duckdb') }}"
-      threads: 4
+      path: "{{ env_var('DUKASTACK_DB_PATH', 'data/dukastack.duckdb') }}"
+      threads: 1

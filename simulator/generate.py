@@ -187,6 +187,6 @@ def generate_history(
 
     # Save state and write to DuckDB
     save_state(state, state_path=state_path)
-    write_raw_database(db_path, state, loaded_at=state["sim_time"])
+    write_raw_database(db_path, state)
 
     return state

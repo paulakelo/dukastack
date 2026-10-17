@@ -4,6 +4,9 @@ config-version: 2
 
 profile: 'dukastack'
 
+flags:
+  send_anonymous_usage_stats: false
+
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -30,3 +33,7 @@ models:
 snapshots:
   dukastack:
     +target_schema: snapshots
+
+vars:
+  dbt_project_evaluator:
+    models_to_exclude: ["fct_model_directories", "fct_source_directories"]
