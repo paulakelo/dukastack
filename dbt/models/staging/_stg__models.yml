@@ -1,0 +1,223 @@
+version: 2
+
+models:
+  - name: stg_shops
+    description: "Staging view for physical shop retail locations."
+    columns:
+      - name: shop_id
+        description: "Primary key of the shop."
+        tests:
+          - unique
+          - not_null
+      - name: shop_name
+        description: "Display name of the shop."
+        tests:
+          - not_null
+      - name: county
+        description: "Kenyan county where the shop resides."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp of last operational update."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_customers
+    description: "Staging view for customer profiles and loyalty tiers."
+    columns:
+      - name: customer_id
+        description: "Primary key identifying the customer."
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Synthetic Kenyan full name."
+        tests:
+          - not_null
+      - name: county
+        description: "Customer home county."
+        tests:
+          - not_null
+      - name: loyalty_tier
+        description: "Customer loyalty tier level."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['basic', 'silver', 'gold']
+      - name: updated_at
+        description: "Timestamp of last operational update."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_products
+    description: "Staging view for retail product inventory and current prices."
+    columns:
+      - name: product_id
+        description: "Primary key identifying the product SKU."
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Full retail commercial product name."
+        tests:
+          - not_null
+      - name: category
+        description: "Product merchandising category."
+        tests:
+          - not_null
+      - name: unit_price_kes
+        description: "Current operational unit price in Kenyan Shillings."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the price or product was last modified."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Staging view for point-of-sale customer order transactions."
+    columns:
+      - name: order_id
+        description: "Primary key identifying the order."
+        tests:
+          - unique
+          - not_null
+      - name: shop_id
+        description: "Foreign key referencing the selling shop."
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Foreign key referencing the purchasing customer."
+        tests:
+          - not_null
+      - name: order_ts
+        description: "Timestamp when the order was placed."
+        tests:
+          - not_null
+      - name: order_status
+        description: "Operational status of the order transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['placed', 'completed', 'cancelled']
+      - name: updated_at
+        description: "Timestamp of last operational status update."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_order_items
+    description: "Staging view for individual item lines within an order (without historical prices)."
+    columns:
+      - name: order_item_id
+        description: "Primary key identifying the order item line."
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "Foreign key referencing the parent order."
+        tests:
+          - not_null
+      - name: product_id
+        description: "Foreign key referencing the product item."
+        tests:
+          - not_null
+      - name: quantity
+        description: "Quantity of product units purchased."
+        tests:
+          - not_null
+      - name: discount_kes
+        description: "Promotional discount applied to this item line in KES."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Operational record timestamp."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_payments
+    description: "Staging view for order payment records."
+    columns:
+      - name: payment_id
+        description: "Primary key identifying the payment record."
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "Foreign key referencing the paid order."
+        tests:
+          - not_null
+      - name: payment_method
+        description: "Tender method used for the transaction."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['mpesa', 'cash', 'card']
+      - name: amount_kes
+        description: "Amount paid in Kenyan Shillings."
+        tests:
+          - not_null
+      - name: paid_at
+        description: "Timestamp when the payment occurred."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Operational record timestamp."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
+
+  - name: stg_refunds
+    description: "Staging view for customer returns and item refunds."
+    columns:
+      - name: refund_id
+        description: "Primary key identifying the refund record."
+        tests:
+          - unique
+          - not_null
+      - name: order_item_id
+        description: "Foreign key referencing the refunded order item line."
+        tests:
+          - not_null
+      - name: quantity
+        description: "Units refunded."
+        tests:
+          - not_null
+      - name: refund_kes
+        description: "Amount refunded in Kenyan Shillings."
+        tests:
+          - not_null
+      - name: refunded_at
+        description: "Timestamp when the refund was processed."
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Operational record timestamp."
+        tests:
+          - not_null
+      - name: _loaded_at
+        description: "Warehouse ingestion timestamp."
+        tests:
+          - not_null
