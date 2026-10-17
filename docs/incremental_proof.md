@@ -34,11 +34,11 @@ This document provides architectural documentation and empirical verification of
 
 ## 2. Marts Architecture
 
-| Mart | Entity / Grain | Primary Metrics |
-| --- | --- | --- |
-| `mrt_daily_sales` | `shop_id` + `order_date` | `total_orders`, `items_sold`, `items_refunded`, `gross_sales_kes`, `refund_amount_kes`, `net_sales_kes` |
-| `mrt_product_perf` | `product_sk` (SCD2 Price Version) | `total_orders`, `units_sold`, `gross_revenue_kes` per price window |
-| `mrt_tier_moves` | `customer_sk` (SCD2 Tier Window) | `previous_tier`, `current_tier`, `total_orders`, `items_purchased`, `total_spend_kes` per tier window |
+| Mart               | Entity / Grain                    | Primary Metrics                                                                                         |
+| ------------------ | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `mrt_daily_sales`  | `shop_id` + `order_date`          | `total_orders`, `items_sold`, `items_refunded`, `gross_sales_kes`, `refund_amount_kes`, `net_sales_kes` |
+| `mrt_product_perf` | `product_sk` (SCD2 Price Version) | `total_orders`, `units_sold`, `gross_revenue_kes` per price window                                      |
+| `mrt_tier_moves`   | `customer_sk` (SCD2 Tier Window)  | `previous_tier`, `current_tier`, `total_orders`, `items_purchased`, `total_spend_kes` per tier window   |
 
 ---
 

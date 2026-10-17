@@ -8,23 +8,23 @@ All layers reside in a single DuckDB database file (`data/dukastack.duckdb`), or
 
 ```text
 +-------------------------------------------------------------------------+
-|                              Dagster                                    |
-|              (Asset-based orchestration, daily schedules)               |
+| Dagster                                      |
+| (Asset-based orchestration, daily schedules) |
 +-------------------------------------------------------------------------+
-                                    |
+|  |
                                     v
 +------------------+     +--------------------+     +---------------------+
-|    Simulator     | --> |   DuckDB (raw)     | --> |   dbt Staging       |
-| (Python + Seed)  |     | (Shops, Customers, |     | (Views: 1-to-1 with |
-|                  |     |  Products, Orders) |     |  raw, typed/cleaned)|
+| Simulator       | --> | DuckDB (raw)       | --> | dbt Staging         |
+| (Python + Seed) |     | (Shops, Customers, |     | (Views: 1-to-1 with |
+|                 |     | Products, Orders)  |     | raw, typed/cleaned) |
 +------------------+     +--------------------+     +---------------------+
-                                                       |
+|  |
                                                        v
 +------------------+     +--------------------+     +---------------------+
-|   dbt Marts      | <-- |     dbt Core       | <-- |    dbt Snapshots    |
-| (Daily Sales,    |     | (Star Schema: Fact |     | (SCD Type 2 tables: |
-|  Product Perf,   |     |  & Dim tables with |     |  snap_customers,    |
-|  Tier Moves)     |     |  as-of joins)      |     |  snap_products)     |
+| dbt Marts     | <-- | dbt Core           | <-- | dbt Snapshots       |
+| (Daily Sales, |     | (Star Schema: Fact |     | (SCD Type 2 tables: |
+| Product Perf, |     | & Dim tables with  |     | snap_customers,     |
+| Tier Moves)   |     | as-of joins)       |     | snap_products)      |
 +------------------+     +--------------------+     +---------------------+
 ```
 

@@ -4,14 +4,14 @@ Every test in dukastack exists because a specific failure justified it. The `cha
 
 ## Chaos Scenario Matrix
 
-| ID | Scenario | Injection Mechanism | Caught By | Severity |
-| --- | --- | --- | --- | --- |
-| **C1** | Retroactive price correction | Changes a product's price but back-dates `updated_at` before the last snapshot | `assert_snapshot_matches_source`: current snapshot row differs from source row | error |
-| **C2** | Late-arriving refund | Writes a refund today for an order placed 5 days ago | Handled by 7-day lookback; verified by `assert_daily_sales_reconcile` | error |
-| **C3** | Orphan order | Generates an order whose `customer_id` does not exist in `customers` | `not_null` & `relationships` on `fct_order_items.customer_sk` | error |
-| **C4** | Duplicate customer row | Inserts a duplicate row with the same `customer_id` and `updated_at` | `unique` test on `stg_customers.customer_id` | error |
-| **C5** | Overpaid order | Writes payments exceeding total items amount | `assert_payments_within_order_total` | error |
-| **C6** | Skipped day | Advances 2 days between builds with same customer changing tier on both | Dagster freshness check on `snap_customers` | warn |
+| ID     | Scenario                     | Injection Mechanism                                                            | Caught By                                                                      | Severity |
+| ------ | ---------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | -------- |
+| **C1** | Retroactive price correction | Changes a product's price but back-dates `updated_at` before the last snapshot | `assert_snapshot_matches_source`: current snapshot row differs from source row | error    |
+| **C2** | Late-arriving refund         | Writes a refund today for an order placed 5 days ago                           | Handled by 7-day lookback; verified by `assert_daily_sales_reconcile`          | error    |
+| **C3** | Orphan order                 | Generates an order whose `customer_id` does not exist in `customers`           | `not_null` & `relationships` on `fct_order_items.customer_sk`                  | error    |
+| **C4** | Duplicate customer row       | Inserts a duplicate row with the same `customer_id` and `updated_at`           | `unique` test on `stg_customers.customer_id`                                   | error    |
+| **C5** | Overpaid order               | Writes payments exceeding total items amount                                   | `assert_payments_within_order_total`                                           | error    |
+| **C6** | Skipped day                  | Advances 2 days between builds with same customer changing tier on both        | Dagster freshness check on `snap_customers`                                    | warn     |
 
 ## Detailed Descriptions
 
