@@ -30,3 +30,7 @@ models:
 snapshots:
   dukastack:
     +target_schema: snapshots
+
+vars:
+  dbt_project_evaluator:
+    models_to_exclude: ["fct_model_directories", "fct_source_directories"]
