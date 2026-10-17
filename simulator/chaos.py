@@ -206,7 +206,7 @@ def inject_c6_skipped_day(
     target_customer["updated_at"] = day2_time
 
     save_state(state, state_path=state_path)
-    write_raw_database(db_path, state, loaded_at=state["sim_time"])
+    write_raw_database(db_path, state)
 
     return (
         f"C6: Advanced 2 days consecutively without snapshot. "
