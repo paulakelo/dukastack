@@ -7,27 +7,33 @@ This document provides architectural documentation and empirical verification of
 ## 1. Incremental Mechanics & Strategy
 
 ### `fct_order_items`
+
 - **Materialization**: `incremental`
 - **Incremental Strategy**: `delete+insert`
 - **Unique Key**: `order_item_id`
 - **Lookback Window**: 7 days based on `greatest(oi.item_updated_at, o.order_updated_at)`:
+
   ```sql
   where greatest(oi.item_updated_at, o.order_updated_at) >= (
-      select date_add(max(this.updated_at), interval (-7) day) from {{ this }} as this
+      select date_add(max(this.updated_at), interval '-7 day') from {{ this }} as this
   )
   ```
+
 - **Rationale**: Captures retroactive status updates (e.g. `placed` -> `completed`) and late line item corrections while maintaining point-in-time SCD2 references to `dim_customers` and `dim_products`.
 
 ### `fct_refunds`
+
 - **Materialization**: `incremental`
 - **Incremental Strategy**: `delete+insert`
 - **Unique Key**: `refund_id`
 - **Lookback Window**: 7 days based on `updated_at`:
+
   ```sql
   where updated_at >= (
       select date_add(max(this.updated_at), interval '-7 day') from {{ this }} as this
   )
   ```
+
 - **Rationale**: Per ADR-0003, refunds are stored as an independent, immutable fact table linking to `order_item_id`, isolating return events from original sales lines.
 
 ---
@@ -45,6 +51,7 @@ This document provides architectural documentation and empirical verification of
 ## 3. Reconciliation Proof & Idempotency
 
 ### Fact-to-Mart Reconciliation Query
+
 ```sql
 SELECT
     (SELECT SUM(line_amount_kes) FROM main_core.fct_order_items) as total_fact_gross,
@@ -55,6 +62,7 @@ SELECT
 ```
 
 ### Empirical Results
+
 ```text
 Fact Gross Sales:   511,850.00 KES
 Fact Refunds:        41,480.00 KES
@@ -65,6 +73,7 @@ Reconciliation:     100% Exact Match (Net Sales = Fact Gross - Fact Refunds)
 ```
 
 ### Idempotency Verification
+
 Two consecutive executions of `dbt build` on the identical state produced 253 passed tests, 2 snapshots updated, 2 incremental models rebuilt without duplicate key violations or state mutations, proving strict pipeline idempotency.
 
 ---
