@@ -1,0 +1,6 @@
+.venv
+node_modules
+milestone_reports
+milestones
+dbt/dbt_packages
+target

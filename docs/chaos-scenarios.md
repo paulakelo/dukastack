@@ -16,31 +16,37 @@ Every test in dukastack exists because a specific failure justified it. The `cha
 ## Detailed Descriptions
 
 ### C1: Retroactive Price Correction
+
 - **Problem**: In real retail systems, a price correction is sometimes applied retroactively in the operational database.
 - **Why it matters**: Timestamp-based snapshots assume `updated_at` is monotonically increasing. Backdated edits bypass standard snapshot tracking.
 - **Verification**: `assert_snapshot_matches_source.sql` queries the latest source state against the snapshot's current record (`dbt_valid_to is null`) and raises an error on discrepancy.
 
 ### C2: Late-Arriving Refund
+
 - **Problem**: Customers return items days after the transaction.
 - **Why it matters**: If fact tables are incrementally loaded without lookback, older periods lose refund reconciliation.
 - **Verification**: Incremental models use `delete+insert` with a 7-day window. `assert_daily_sales_reconcile.sql` ensures daily net sales match all recorded refunds.
 
 ### C3: Orphan Order
+
 - **Problem**: POS transaction logged without a valid customer ID.
 - **Why it matters**: Breaks referential integrity and silently corrupts customer analytics.
 - **Verification**: `as_of_join` uses `LEFT JOIN`. Unmatched customers produce `NULL` keys, triggering failure in the dbt `not_null` test.
 
 ### C4: Duplicate Customer Row
+
 - **Problem**: Double write from POS sync service.
 - **Why it matters**: Multiplies snapshot rows and produces Cartesian products in downstream marts.
 - **Verification**: Primary key uniqueness test on `stg_customers`.
 
 ### C5: Overpaid Order
+
 - **Problem**: Duplicate payment record or corrupted payment sum.
 - **Why it matters**: Distorts cash reconciliations and payment provider audits.
 - **Verification**: Singular test `assert_payments_within_order_total.sql`.
 
 ### C6: Skipped Day
+
 - **Problem**: Pipeline pipeline run was missed (e.g. outage or downtime).
 - **Why it matters**: Intermediate tier changes within the skipped day are lost in daily snapshots.
 - **Verification**: Dagster asset check flags pipeline lag; documented limitation in ADR-0002.
