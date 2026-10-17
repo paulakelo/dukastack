@@ -211,3 +211,42 @@ models:
         description: "Timestamp when the record was last modified."
         data_tests:
           - not_null
+
+  - name: fct_refunds
+    description: "Item returns and customer refund events, modeled as an immutable incremental fact."
+    columns:
+      - name: refund_id
+        description: "Primary key identifying each refund transaction."
+        data_tests:
+          - unique
+          - not_null
+      - name: order_item_id
+        description: "Foreign key referencing the original sales line in fct_order_items."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('fct_order_items')
+              field: order_item_id
+      - name: refund_date
+        description: "Calendar date when the refund occurred, referencing dim_date."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: refunded_at
+        description: "Timestamp when the refund was processed."
+        data_tests:
+          - not_null
+      - name: quantity
+        description: "Number of units returned."
+        data_tests:
+          - not_null
+      - name: refund_kes
+        description: "Amount refunded in KES."
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the refund record was last updated."
+        data_tests:
+          - not_null

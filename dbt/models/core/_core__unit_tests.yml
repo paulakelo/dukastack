@@ -4,6 +4,9 @@ unit_tests:
   - name: test_fct_order_items_as_of_join_boundaries
     description: "Verify that as_of_join correctly handles all four temporal boundary conditions and discount computations."
     model: fct_order_items
+    overrides:
+      macros:
+        is_incremental: false
     given:
       - input: ref('stg_orders')
         rows:
