@@ -18,7 +18,7 @@ help:
 
 setup:
 	@if command -v uv >/dev/null 2>&1; then \
-		uv venv --python $(PYTHON) $(VENV); \
+		uv venv --clear --python $(PYTHON) $(VENV); \
 		uv pip install --python $(BIN)/python -e ".[dev]"; \
 	else \
 		$(PYTHON) -m venv $(VENV); \
