@@ -1,0 +1,29 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Raw transactional point-of-sale data loaded from the operational simulator."
+    loaded_at_field: _loaded_at
+    freshness:
+      warn_after:
+        count: 7
+        period: day
+      error_after:
+        count: 14
+        period: day
+    tables:
+      - name: shops
+        description: "Static retail shop locations."
+      - name: customers
+        description: "Customer accounts with mutating loyalty tier history."
+      - name: products
+        description: "Retail product catalog with fluctuating unit prices."
+      - name: orders
+        description: "POS sale order headers."
+      - name: order_items
+        description: "Order line items without transaction-time unit prices."
+      - name: payments
+        description: "Payments processed per order."
+      - name: refunds
+        description: "Refunds and returns recorded up to 7 days post-sale."
