@@ -33,13 +33,14 @@ order by dbt_valid_from asc;
 ### Result
 
 | customer_id | customer_name | county | loyalty_tier | dbt_valid_from | dbt_valid_to | is_current |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | CUST-0039 | Amina Wanjala | Kisumu | silver | 2026-09-01 08:00:00 | 2026-09-10 08:00:00 | False |
 | CUST-0039 | Amina Wanjala | Kisumu | gold | 2026-09-10 08:00:00 | 2026-09-11 08:00:00 | False |
 | CUST-0039 | Amina Wanjala | Kisumu | basic | 2026-09-11 08:00:00 | 2026-09-21 08:00:00 | False |
 | CUST-0039 | Amina Wanjala | Kisumu | silver | 2026-09-21 08:00:00 | NULL | True |
 
 **Observations**:
+
 - Customer `CUST-0039` transitioned through 4 distinct tier versions (`silver` $\to$ `gold` $\to$ `basic` $\to$ `silver`).
 - Validity timestamps have zero gaps and zero overlaps across version boundaries.
 - The active tier version has `dbt_valid_to IS NULL` and `is_current = True`.
@@ -55,7 +56,7 @@ order by dbt_valid_from asc;
 ### Result for Product `PRD-004` (Tusker Lager 500ml)
 
 | product_id | product_name | category | unit_price_kes | dbt_valid_from | dbt_valid_to | is_current |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | PRD-004 | Tusker Lager 500ml | Beverages | 220.00 | 2026-09-01 08:00:00 | 2026-09-10 08:00:00 | False |
 | PRD-004 | Tusker Lager 500ml | Beverages | 245.00 | 2026-09-10 08:00:00 | 2026-09-12 08:00:00 | False |
 | PRD-004 | Tusker Lager 500ml | Beverages | 265.00 | 2026-09-12 08:00:00 | 2026-09-17 08:00:00 | False |

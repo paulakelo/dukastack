@@ -49,7 +49,7 @@ order by f.order_item_id;
 **Output**:
 
 | order_id | order_item_id | order_ts | customer_id | customer_name | tier_at_sale | product_id | product_name | category | price_at_sale | quantity | line_amount_kes |
-|---|---|---|---|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | ORD-0000006 | ITM-00000011 | 2026-09-02 08:06:40 | CUST-0016 | Otieno Musyoka | basic | PRD-012 | Sunlight Washing Powder 1kg | Personal Care | 260.00 | 2 | 520.00 |
 
 ---
@@ -59,7 +59,7 @@ order by f.order_item_id;
 Customer `CUST-0020` placed orders before and after a loyalty tier promotion from `basic` to `silver`. Notice how the as-of join dynamically reconstructed the accurate tier and prevailing product prices at each transaction timestamp without altering historical records:
 
 | Order ID | Order Timestamp | Prevailing Tier (`tier_at_sale`) | Product Description | Point-in-Time Unit Price (KES) | Quantity | Line Amount (KES) |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | `ORD-0000010` | 2026-09-02 16:45:18 | **basic** | Dawaat Basmati Rice 2kg | 450.00 | 5 | 2250.00 |
 | `ORD-0000022` | 2026-09-03 17:57:35 | **basic** | Salit Cooking Oil 1L | **320.00** | 2 | 640.00 |
 | `ORD-0000065` | 2026-09-05 13:30:16 | **basic** | Royco Cubes 40s | 120.00 | 1 | 120.00 |
