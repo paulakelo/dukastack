@@ -1,0 +1,213 @@
+version: 2
+
+models:
+  - name: dim_shops
+    description: "Physical retail shops (dukas) dimension, modeled as Type 1 SCD."
+    columns:
+      - name: shop_sk
+        description: "Surrogate key generated from shop_id."
+        data_tests:
+          - unique
+          - not_null
+      - name: shop_id
+        description: "Natural key identifying the physical shop."
+        data_tests:
+          - not_null
+      - name: shop_name
+        description: "Full descriptive name and location of the shop."
+        data_tests:
+          - not_null
+      - name: county
+        description: "Kenyan administrative county where the shop resides."
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the shop record was last updated."
+        data_tests:
+          - not_null
+
+  - name: dim_customers
+    description: "Customer loyalty tier dimension, tracked with SCD Type 2 point-in-time validity."
+    columns:
+      - name: customer_sk
+        description: "Surrogate key hashed from customer_id and valid_from."
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Natural key identifying the customer."
+        data_tests:
+          - not_null
+      - name: customer_name
+        description: "Synthetic customer full name."
+        data_tests:
+          - not_null
+      - name: county
+        description: "County where the customer is registered."
+        data_tests:
+          - not_null
+      - name: loyalty_tier
+        description: "Active loyalty tier (basic, silver, gold) during this validity window."
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['basic', 'silver', 'gold']
+      - name: valid_from
+        description: "Timestamp marking the start of this tier version."
+        data_tests:
+          - not_null
+      - name: valid_to
+        description: "Timestamp marking the end of this tier version (null if currently active)."
+      - name: is_current
+        description: "Boolean flag indicating if this is the active customer record."
+        data_tests:
+          - not_null
+
+  - name: dim_products
+    description: "Retail product dimension, tracked with SCD Type 2 point-in-time price history."
+    columns:
+      - name: product_sk
+        description: "Surrogate key hashed from product_id and valid_from."
+        data_tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: "Natural key identifying the product SKU."
+        data_tests:
+          - not_null
+      - name: product_name
+        description: "Full retail commercial name of the product."
+        data_tests:
+          - not_null
+      - name: category
+        description: "Merchandising category (e.g., Food Cupboard, Personal Care)."
+        data_tests:
+          - not_null
+      - name: unit_price_kes
+        description: "Retail unit selling price in KES applicable during this window."
+        data_tests:
+          - not_null
+      - name: valid_from
+        description: "Timestamp marking the start of this price version."
+        data_tests:
+          - not_null
+      - name: valid_to
+        description: "Timestamp marking the end of this price version (null if currently active)."
+      - name: is_current
+        description: "Boolean flag indicating if this is the active product price version."
+        data_tests:
+          - not_null
+
+  - name: dim_date
+    description: "Calendar date spine dimension supporting daily time-series analysis."
+    columns:
+      - name: date_key
+        description: "Calendar date primary key (YYYY-MM-DD)."
+        data_tests:
+          - unique
+          - not_null
+      - name: date_day
+        description: "Calendar date."
+        data_tests:
+          - not_null
+      - name: date_year
+        description: "Calendar year (e.g. 2026)."
+        data_tests:
+          - not_null
+      - name: date_quarter
+        description: "Calendar quarter (1-4)."
+        data_tests:
+          - not_null
+      - name: date_month
+        description: "Calendar month number (1-12)."
+        data_tests:
+          - not_null
+      - name: month_name
+        description: "Full English month name (e.g. September)."
+        data_tests:
+          - not_null
+      - name: day_of_month
+        description: "Day of the month (1-31)."
+        data_tests:
+          - not_null
+      - name: day_of_week
+        description: "Day of the week index (0=Sunday to 6=Saturday)."
+        data_tests:
+          - not_null
+      - name: day_name
+        description: "Full English day name (e.g. Tuesday)."
+        data_tests:
+          - not_null
+      - name: is_weekend
+        description: "Boolean flag indicating Saturday or Sunday."
+        data_tests:
+          - not_null
+
+  - name: fct_order_items
+    description: "Point-of-sale line item sales transactions enriched with point-in-time dimensions via as-of joins."
+    columns:
+      - name: order_item_id
+        description: "Primary key identifying each individual sales line item."
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "Foreign key linking to the parent order header."
+        data_tests:
+          - not_null
+      - name: shop_sk
+        description: "Foreign key referencing dim_shops."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_shops')
+              field: shop_sk
+      - name: customer_sk
+        description: "Point-in-time foreign key referencing dim_customers at order_ts."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_sk
+      - name: product_sk
+        description: "Point-in-time foreign key referencing dim_products at order_ts."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_sk
+      - name: order_date
+        description: "Calendar date when the sale took place, referencing dim_date."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: order_ts
+        description: "Exact timestamp when the sale was transacted."
+        data_tests:
+          - not_null
+      - name: order_status
+        description: "Order status (placed, completed, cancelled)."
+        data_tests:
+          - not_null
+      - name: quantity
+        description: "Number of units purchased in this line item."
+        data_tests:
+          - not_null
+      - name: unit_price_kes
+        description: "Point-in-time unit price in KES reconstructed from dim_products."
+        data_tests:
+          - not_null
+      - name: discount_kes
+        description: "Discount amount in KES applied to this line item."
+        data_tests:
+          - not_null
+      - name: line_amount_kes
+        description: "Net computed line revenue: (quantity * unit_price_kes) - discount_kes."
+        data_tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the record was last modified."
+        data_tests:
+          - not_null

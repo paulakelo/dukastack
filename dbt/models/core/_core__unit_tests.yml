@@ -1,0 +1,44 @@
+version: 2
+
+unit_tests:
+  - name: test_fct_order_items_as_of_join_boundaries
+    description: "Verify that as_of_join correctly handles all four temporal boundary conditions and discount computations."
+    model: fct_order_items
+    given:
+      - input: ref('stg_orders')
+        rows:
+          # Case 1: Order exactly at valid_from -> matches new version
+          - {order_id: 'ORD-001', customer_id: 'CUST-001', shop_id: 'SHP-001', order_ts: '2026-09-10 08:00:00', order_status: 'completed', updated_at: '2026-09-10 08:00:00'}
+          # Case 2: Order one second before valid_to -> matches old version
+          - {order_id: 'ORD-002', customer_id: 'CUST-001', shop_id: 'SHP-001', order_ts: '2026-09-10 07:59:59', order_status: 'completed', updated_at: '2026-09-10 07:59:59'}
+          # Case 3: Order after the last version -> matches active version (valid_to is null)
+          - {order_id: 'ORD-003', customer_id: 'CUST-001', shop_id: 'SHP-001', order_ts: '2026-10-01 12:00:00', order_status: 'completed', updated_at: '2026-10-01 12:00:00'}
+          # Case 4: Order before first version -> no match (customer_sk is null)
+          - {order_id: 'ORD-004', customer_id: 'CUST-001', shop_id: 'SHP-001', order_ts: '2026-08-31 23:59:59', order_status: 'completed', updated_at: '2026-08-31 23:59:59'}
+
+      - input: ref('stg_order_items')
+        rows:
+          - {order_item_id: 'ITEM-001', order_id: 'ORD-001', product_id: 'PRD-001', quantity: 2, discount_kes: 0.00, updated_at: '2026-09-10 08:00:00'}
+          - {order_item_id: 'ITEM-002', order_id: 'ORD-002', product_id: 'PRD-001', quantity: 1, discount_kes: 0.00, updated_at: '2026-09-10 07:59:59'}
+          - {order_item_id: 'ITEM-003', order_id: 'ORD-003', product_id: 'PRD-001', quantity: 3, discount_kes: 10.00, updated_at: '2026-10-01 12:00:00'}
+          - {order_item_id: 'ITEM-004', order_id: 'ORD-004', product_id: 'PRD-001', quantity: 1, discount_kes: 0.00, updated_at: '2026-08-31 23:59:59'}
+
+      - input: ref('dim_customers')
+        rows:
+          - {customer_sk: 'cust_sk_v1', customer_id: 'CUST-001', valid_from: '2026-09-01 00:00:00', valid_to: '2026-09-10 08:00:00'}
+          - {customer_sk: 'cust_sk_v2', customer_id: 'CUST-001', valid_from: '2026-09-10 08:00:00', valid_to: null}
+
+      - input: ref('dim_products')
+        rows:
+          - {product_sk: 'prod_sk_v1', product_id: 'PRD-001', unit_price_kes: 200.00, valid_from: '2026-09-01 00:00:00', valid_to: null}
+
+      - input: ref('dim_shops')
+        rows:
+          - {shop_sk: 'shop_sk_001', shop_id: 'SHP-001'}
+
+    expect:
+      rows:
+        - {order_item_id: 'ITEM-001', customer_sk: 'cust_sk_v2', product_sk: 'prod_sk_v1', line_amount_kes: 400.00}
+        - {order_item_id: 'ITEM-002', customer_sk: 'cust_sk_v1', product_sk: 'prod_sk_v1', line_amount_kes: 200.00}
+        - {order_item_id: 'ITEM-003', customer_sk: 'cust_sk_v2', product_sk: 'prod_sk_v1', line_amount_kes: 590.00}
+        - {order_item_id: 'ITEM-004', customer_sk: null, product_sk: null, line_amount_kes: null}
