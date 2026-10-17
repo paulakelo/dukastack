@@ -1,3 +1,11 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='order_item_id',
+        incremental_strategy='delete+insert'
+    )
+}}
+
 with orders as (
     select
         order_id,
@@ -35,6 +43,11 @@ orders_and_items as (
     from order_items as oi
     inner join orders as o
         on oi.order_id = o.order_id
+    {% if is_incremental() %}
+        where greatest(oi.item_updated_at, o.order_updated_at) >= (
+            select date_add(max(this.updated_at), interval '-7 day') from {{ this }} as this
+        )
+    {% endif %}
 ),
 
 joined as (
