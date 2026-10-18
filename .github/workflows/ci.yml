@@ -36,6 +36,9 @@ jobs:
       - name: Run Python unit tests
         run: pytest tests/
 
+      - name: Validate Dagster definitions
+        run: dagster definitions validate -f orchestration/dukastack_dagster/definitions.py
+
       - name: Generate synthetic POS history (seeded)
         run: python -m simulator.cli generate --days 30 --seed 42
 
