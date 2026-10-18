@@ -8,7 +8,7 @@ Follow the checklist below to capture each view during or after running the demo
 
 ---
 
-## 🎯 Target Screenshot Checklist
+## Target Screenshot Checklist
 
 | Filename | Surface | Description & Framing | How to Capture |
 | :--- | :--- | :--- | :--- |
@@ -20,7 +20,8 @@ Follow the checklist below to capture each view during or after running the demo
 
 ---
 
-## 📐 Recommended Capture Guidelines
+## Recommended Capture Guidelines
+
 - **Resolution:** 1920x1080 (16:9) or higher.
 - **Theme:** Dark mode preferred where available for crisp contrast.
 - **Format:** PNG with clean cropping (avoid browser bookmarks bar or OS taskbars).

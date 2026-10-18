@@ -5,7 +5,7 @@ a zero-cost, local retail analytics warehouse built with **dbt**, **DuckDB**, an
 
 ---
 
-## 📋 Overview of Demo Beats
+## Overview of Demo Beats
 
 | Beat | Action / Command | UI View | One-Sentence Spoken Script | Target Duration |
 | :--- | :--- | :--- | :--- | :--- |
@@ -19,14 +19,18 @@ a zero-cost, local retail analytics warehouse built with **dbt**, **DuckDB**, an
 
 ---
 
-## 🎬 Step-by-Step Execution Guide
+## Step-by-Step Execution Guide
 
 ### Beat 1: Initialize Demo Warehouse
+
 **Terminal Command:**
+
 ```bash
 make demo
 ```
+
 **What happens:**
+
 - Cleans any previous database artifacts in `data/`.
 - Runs `simulator.cli generate --days 30 --seed 42` to create synthetic Kenyan POS records (shops, products, customers, orders, order items, payments, refunds).
 - Executes `dbt build` (snapshots, staging models, core dimensions, incremental facts, contracts, and tests).
@@ -37,11 +41,15 @@ make demo
 ---
 
 ### Beat 2: Explore dbt Documentation & Lineage
+
 **Terminal Command (in a separate tab or background):**
+
 ```bash
 make docs-serve
 ```
+
 **Browser Navigation:**
+
 - Open `http://localhost:8080`.
 - Click the bottom-right **Lineage Graph** icon.
 - Filter to a mart (e.g., `mrt_daily_sales` or `mrt_product_perf`).
@@ -54,11 +62,15 @@ make docs-serve
 ---
 
 ### Beat 3: Inspect Dagster Asset Graph
+
 **Terminal Command (in a separate tab):**
+
 ```bash
 make dagster
 ```
+
 **Browser Navigation:**
+
 - Open `http://localhost:3000`.
 - Navigate to **Deployment** -> **Assets** (or **Asset Groups**).
 - Show the visual flow from `raw_pos_data` asset through `snapshots`, `staging`, `core`, and `marts`.
@@ -70,11 +82,15 @@ make dagster
 ---
 
 ### Beat 4: Inject Chaos (Data Quality Failure)
+
 **Terminal Command:**
+
 ```bash
 make demo-fail
 ```
+
 **What happens:**
+
 - Injects a duplicate sales line item (`ITM-00000001`) into the raw POS data stream.
 - Executes `dbt build --select stg_order_items+`.
 
@@ -84,7 +100,9 @@ make demo-fail
 ---
 
 ### Beat 5: Demonstrate Pipeline Circuit Breaker
+
 **In Browser / Terminal:**
+
 - Show the dbt test error output: `unique_stg_order_items_order_item_id FAIL [1 error]`.
 - Point out that downstream models `fct_order_items`, `fct_refunds`, `mrt_daily_sales`, and `mrt_product_perf` are **SKIP [not run]**.
 - If viewing in Dagster UI, show the red failed asset check and blocked downstream assets.
@@ -95,11 +113,15 @@ make demo-fail
 ---
 
 ### Beat 6: Recover to Green
+
 **Terminal Command:**
+
 ```bash
 make demo-recover
 ```
+
 **What happens:**
+
 - Deletes the duplicate row from `raw.order_items`.
 - Re-runs `dbt build --select stg_order_items+`.
 - All tests pass: `PASS=20 WARN=0 ERROR=0 SKIP=0`.
@@ -110,11 +132,15 @@ make demo-recover
 ---
 
 ### Beat 7: Run Sample Queries & Prove SCD2 Correctness
+
 **Terminal Command:**
+
 ```bash
 make queries
 ```
+
 **What to show:**
+
 - Open `docs/sample_queries.md` or display the output of `queries/bq3_price_change_impact_scd2.sql`.
 - Highlight **Kimbo Shortening (PRD-009)**:
   - 180 KES price window (2026-09-01 to 2026-10-03): 158 orders, 466 units, KES 83,700 gross.
@@ -127,6 +153,6 @@ make queries
 
 ---
 
-## 📸 Screenshot Artifact Checklist
+## Screenshot Artifact Checklist
 
 Refer to [`docs/screenshots/README.md`](screenshots/README.md) for target filenames, recommended capture resolutions, and framing details.
