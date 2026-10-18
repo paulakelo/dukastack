@@ -32,6 +32,7 @@ htmlcov/
 dagster_home/
 
 # System / IDE
+.agents/
 .DS_Store
 .idea/
 .vscode/
