@@ -45,11 +45,11 @@ ORDER BY
 
 | shop_id | shop_name                       | county  | total_orders | total_items_sold | total_items_refunded | gross_sales_kes | refund_amount_kes | net_sales_kes | refund_rate_pct | avg_order_value_kes |
 | ------- | ------------------------------- | ------- | ------------ | ---------------- | -------------------- | --------------- | ----------------- | ------------- | --------------- | ------------------- |
-| SHP-002 | Mama Oliech Kiosk - Kisumu      | Kisumu  | 165          | 1247             | 136                  | 235635.00       | 24295.00          | 211340.00     | 10.31           | 1280.85             |
-| SHP-005 | Thika Road Corner Duka - Kiambu | Kiambu  | 158          | 1265             | 173                  | 242400.00       | 33625.00          | 208775.00     | 13.87           | 1321.36             |
-| SHP-003 | Coast Breeze Stores - Mombasa   | Mombasa | 154          | 1198             | 173                  | 228415.00       | 38810.00          | 189605.00     | 16.99           | 1231.2              |
-| SHP-001 | Duka Mwangi - Nairobi CBD       | Nairobi | 154          | 1128             | 126                  | 209345.00       | 25980.00          | 183365.00     | 12.41           | 1190.68             |
-| SHP-004 | Rift Valley Provisions - Nakuru | Nakuru  | 155          | 1097             | 108                  | 199875.00       | 20120.00          | 179755.00     | 10.07           | 1159.71             |
+| SHP-002 | Mama Oliech Kiosk - Kisumu      | Kisumu  | 146          | 1118             | 117                  | 214820.00       | 20295.00          | 194525.00     | 9.45            | 1332.36             |
+| SHP-005 | Thika Road Corner Duka - Kiambu | Kiambu  | 144          | 1157             | 153                  | 222575.00       | 30565.00          | 192010.00     | 13.73           | 1333.4              |
+| SHP-003 | Coast Breeze Stores - Mombasa   | Mombasa | 144          | 1127             | 158                  | 216695.00       | 34355.00          | 182340.00     | 15.85           | 1266.25             |
+| SHP-004 | Rift Valley Provisions - Nakuru | Nakuru  | 143          | 1018             | 106                  | 188155.00       | 19865.00          | 168290.00     | 10.56           | 1176.85             |
+| SHP-001 | Duka Mwangi - Nairobi CBD       | Nairobi | 137          | 1000             | 115                  | 184240.00       | 22975.00          | 161265.00     | 12.47           | 1177.12             |
 
 ---
 
@@ -89,16 +89,16 @@ ORDER BY
 
 | product_id | product_name                | category      | current_price_kes | total_orders | total_units_sold | gross_revenue_kes | avg_units_per_day |
 | ---------- | --------------------------- | ------------- | ----------------- | ------------ | ---------------- | ----------------- | ----------------- |
-| PRD-003    | Brookside Milk 500ml        | Dairy         | 65.00             | 192          | 555              | 35865.00          | 16.8              |
-| PRD-008    | Kensalt Table Salt 1kg      | Food Cupboard | 45.00             | 169          | 523              | 23375.00          | 15.8              |
-| PRD-007    | Ketepa Tea Leaves 250g      | Beverages     | 140.00            | 174          | 522              | 72890.00          | 15.8              |
-| PRD-005    | Geisha Soap 225g            | Personal Care | 100.00            | 170          | 511              | 55380.00          | 15.5              |
-| PRD-004    | Tusker Lager 500ml          | Beverages     | 220.00            | 164          | 505              | 110910.00         | 15.3              |
-| PRD-012    | Sunlight Washing Powder 1kg | Personal Care | 260.00            | 156          | 504              | 130890.00         | 15.3              |
-| PRD-010    | Royco Cubes 40s             | Food Cupboard | 120.00            | 170          | 499              | 59690.00          | 15.1              |
-| PRD-009    | Kimbo Shortening 500g       | Food Cupboard | 255.00            | 167          | 494              | 90010.00          | 15.0              |
-| PRD-001    | Unga Wa Dola 2kg            | Food Cupboard | 210.00            | 146          | 467              | 97900.00          | 14.2              |
-| PRD-011    | Dawaat Basmati Rice 2kg     | Food Cupboard | 450.00            | 151          | 461              | 207210.00         | 14.0              |
+| PRD-003    | Brookside Milk 500ml        | Dairy         | 65.00             | 172          | 496              | 32050.00          | 16.5              |
+| PRD-007    | Ketepa Tea Leaves 250g      | Beverages     | 140.00            | 161          | 483              | 67460.00          | 16.1              |
+| PRD-008    | Kensalt Table Salt 1kg      | Food Cupboard | 45.00             | 154          | 474              | 21180.00          | 15.8              |
+| PRD-012    | Sunlight Washing Powder 1kg | Personal Care | 260.00            | 139          | 459              | 119210.00         | 15.3              |
+| PRD-010    | Royco Cubes 40s             | Food Cupboard | 120.00            | 154          | 457              | 54670.00          | 15.2              |
+| PRD-004    | Tusker Lager 500ml          | Beverages     | 220.00            | 147          | 448              | 98380.00          | 14.9              |
+| PRD-005    | Geisha Soap 225g            | Personal Care | 110.00            | 149          | 447              | 48990.00          | 14.9              |
+| PRD-009    | Kimbo Shortening 500g       | Food Cupboard | 180.00            | 150          | 441              | 79210.00          | 14.7              |
+| PRD-002    | Salit Cooking Oil 1L        | Food Cupboard | 320.00            | 138          | 439              | 140330.00         | 14.6              |
+| PRD-001    | Unga Wa Dola 2kg            | Food Cupboard | 210.00            | 133          | 433              | 90780.00          | 14.4              |
 
 ---
 
@@ -107,7 +107,7 @@ ORDER BY
 **Grain:** One row per product SCD2 price validity window (product_sk).
 
 **What to look for:**
-- 1. Products with multiple SCD2 price versions (e.g. Kimbo Shortening PRD-009, Geisha Soap PRD-005).
+- 1. Products with multiple SCD2 price versions (e.g. Kimbo Shortening PRD-009, Geisha Soap PRD-005) when history advances.
 - 2. Orders and units sold correctly partitioned into distinct validity windows (price_valid_from to price_valid_to).
 - 3. Historical orders priced at the rate active when placed without retroactive restatement.
 
@@ -117,6 +117,13 @@ WITH multi_version_products AS (
     FROM mrt_product_perf
     GROUP BY product_id
     HAVING COUNT(*) > 1
+),
+candidate_products AS (
+    SELECT product_id FROM multi_version_products
+    UNION ALL
+    SELECT product_id FROM mrt_product_perf
+    WHERE NOT EXISTS (SELECT 1 FROM multi_version_products)
+    LIMIT 5
 )
 SELECT
     p.product_id,
@@ -130,7 +137,7 @@ SELECT
     p.units_sold,
     ROUND(p.gross_revenue_kes, 2) AS gross_revenue_kes
 FROM mrt_product_perf AS p
-INNER JOIN multi_version_products AS m ON p.product_id = m.product_id
+WHERE p.product_id IN (SELECT product_id FROM candidate_products)
 ORDER BY
     p.product_id ASC,
     p.price_valid_from ASC;
@@ -138,13 +145,13 @@ ORDER BY
 
 ### Results (Top 10 rows)
 
-| product_id | product_name          | category      | unit_price_kes | valid_from       | valid_to         | is_current_price | total_orders | units_sold | gross_revenue_kes |
-| ---------- | --------------------- | ------------- | -------------- | ---------------- | ---------------- | ---------------- | ------------ | ---------- | ----------------- |
-| PRD-005    | Geisha Soap 225g      | Personal Care | 110.00         | 2026-09-01 08:00 | 2026-10-02 08:00 | False            | 149          | 447        | 48990.00          |
-| PRD-005    | Geisha Soap 225g      | Personal Care | 100.00         | 2026-10-02 08:00 | ACTIVE (CURRENT) | True             | 21           | 64         | 6390.00           |
-| PRD-009    | Kimbo Shortening 500g | Food Cupboard | 180.00         | 2026-09-01 08:00 | 2026-10-03 08:00 | False            | 158          | 466        | 83700.00          |
-| PRD-009    | Kimbo Shortening 500g | Food Cupboard | 215.00         | 2026-10-03 08:00 | 2026-10-04 08:00 | False            | 6            | 20         | 4290.00           |
-| PRD-009    | Kimbo Shortening 500g | Food Cupboard | 255.00         | 2026-10-04 08:00 | ACTIVE (CURRENT) | True             | 3            | 8          | 2020.00           |
+| product_id | product_name         | category      | unit_price_kes | valid_from       | valid_to         | is_current_price | total_orders | units_sold | gross_revenue_kes |
+| ---------- | -------------------- | ------------- | -------------- | ---------------- | ---------------- | ---------------- | ------------ | ---------- | ----------------- |
+| PRD-001    | Unga Wa Dola 2kg     | Food Cupboard | 210.00         | 2026-09-01 08:00 | ACTIVE (CURRENT) | True             | 133          | 433        | 90780.00          |
+| PRD-002    | Salit Cooking Oil 1L | Food Cupboard | 320.00         | 2026-09-01 08:00 | ACTIVE (CURRENT) | True             | 138          | 439        | 140330.00         |
+| PRD-003    | Brookside Milk 500ml | Dairy         | 65.00          | 2026-09-01 08:00 | ACTIVE (CURRENT) | True             | 172          | 496        | 32050.00          |
+| PRD-004    | Tusker Lager 500ml   | Beverages     | 220.00         | 2026-09-01 08:00 | ACTIVE (CURRENT) | True             | 147          | 448        | 98380.00          |
+| PRD-005    | Geisha Soap 225g     | Personal Care | 110.00         | 2026-09-01 08:00 | ACTIVE (CURRENT) | True             | 149          | 447        | 48990.00          |
 
 ---
 
@@ -180,16 +187,16 @@ ORDER BY
 
 | product_id | product_name                | category      | current_price_kes | total_orders | total_units_sold | gross_revenue_kes |
 | ---------- | --------------------------- | ------------- | ----------------- | ------------ | ---------------- | ----------------- |
-| PRD-006    | Pembe Maize Flour 2kg       | Food Cupboard | 195.00            | 143          | 434              | 84510.00          |
-| PRD-002    | Salit Cooking Oil 1L        | Food Cupboard | 320.00            | 147          | 460              | 147040.00         |
-| PRD-011    | Dawaat Basmati Rice 2kg     | Food Cupboard | 450.00            | 151          | 461              | 207210.00         |
-| PRD-001    | Unga Wa Dola 2kg            | Food Cupboard | 210.00            | 146          | 467              | 97900.00          |
-| PRD-009    | Kimbo Shortening 500g       | Food Cupboard | 255.00            | 167          | 494              | 90010.00          |
-| PRD-010    | Royco Cubes 40s             | Food Cupboard | 120.00            | 170          | 499              | 59690.00          |
-| PRD-012    | Sunlight Washing Powder 1kg | Personal Care | 260.00            | 156          | 504              | 130890.00         |
-| PRD-004    | Tusker Lager 500ml          | Beverages     | 220.00            | 164          | 505              | 110910.00         |
-| PRD-005    | Geisha Soap 225g            | Personal Care | 100.00            | 170          | 511              | 55380.00          |
-| PRD-007    | Ketepa Tea Leaves 250g      | Beverages     | 140.00            | 174          | 522              | 72890.00          |
+| PRD-006    | Pembe Maize Flour 2kg       | Food Cupboard | 195.00            | 134          | 411              | 80045.00          |
+| PRD-011    | Dawaat Basmati Rice 2kg     | Food Cupboard | 450.00            | 141          | 432              | 194180.00         |
+| PRD-001    | Unga Wa Dola 2kg            | Food Cupboard | 210.00            | 133          | 433              | 90780.00          |
+| PRD-002    | Salit Cooking Oil 1L        | Food Cupboard | 320.00            | 138          | 439              | 140330.00         |
+| PRD-009    | Kimbo Shortening 500g       | Food Cupboard | 180.00            | 150          | 441              | 79210.00          |
+| PRD-005    | Geisha Soap 225g            | Personal Care | 110.00            | 149          | 447              | 48990.00          |
+| PRD-004    | Tusker Lager 500ml          | Beverages     | 220.00            | 147          | 448              | 98380.00          |
+| PRD-010    | Royco Cubes 40s             | Food Cupboard | 120.00            | 154          | 457              | 54670.00          |
+| PRD-012    | Sunlight Washing Powder 1kg | Personal Care | 260.00            | 139          | 459              | 119210.00         |
+| PRD-008    | Kensalt Table Salt 1kg      | Food Cupboard | 45.00             | 154          | 474              | 21180.00          |
 
 ---
 
@@ -227,10 +234,10 @@ ORDER BY
 
 | shop_id | shop_name                       | county  | first_order_date | latest_order_date | active_reporting_days | total_orders | total_items_sold | total_net_sales_kes |
 | ------- | ------------------------------- | ------- | ---------------- | ----------------- | --------------------- | ------------ | ---------------- | ------------------- |
-| SHP-001 | Duka Mwangi - Nairobi CBD       | Nairobi | 2026-09-02       | 2026-10-04        | 33                    | 154          | 1128             | 183365.00           |
-| SHP-002 | Mama Oliech Kiosk - Kisumu      | Kisumu  | 2026-09-02       | 2026-10-04        | 33                    | 165          | 1247             | 211340.00           |
-| SHP-003 | Coast Breeze Stores - Mombasa   | Mombasa | 2026-09-02       | 2026-10-04        | 33                    | 154          | 1198             | 189605.00           |
-| SHP-004 | Rift Valley Provisions - Nakuru | Nakuru  | 2026-09-02       | 2026-10-04        | 32                    | 155          | 1097             | 179755.00           |
-| SHP-005 | Thika Road Corner Duka - Kiambu | Kiambu  | 2026-09-02       | 2026-10-04        | 32                    | 158          | 1265             | 208775.00           |
+| SHP-001 | Duka Mwangi - Nairobi CBD       | Nairobi | 2026-09-02       | 2026-10-01        | 30                    | 137          | 1000             | 161265.00           |
+| SHP-002 | Mama Oliech Kiosk - Kisumu      | Kisumu  | 2026-09-02       | 2026-10-01        | 30                    | 146          | 1118             | 194525.00           |
+| SHP-003 | Coast Breeze Stores - Mombasa   | Mombasa | 2026-09-02       | 2026-10-01        | 30                    | 144          | 1127             | 182340.00           |
+| SHP-004 | Rift Valley Provisions - Nakuru | Nakuru  | 2026-09-02       | 2026-10-01        | 29                    | 143          | 1018             | 168290.00           |
+| SHP-005 | Thika Road Corner Duka - Kiambu | Kiambu  | 2026-09-02       | 2026-10-01        | 29                    | 144          | 1157             | 192010.00           |
 
 ---
