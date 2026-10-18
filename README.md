@@ -158,7 +158,8 @@ dukastack/
 │       └── schedules.py
 ├── tests/
 │   ├── test_determinism.py
-│   └── test_chaos.py
+│   ├── test_chaos.py
+│   └── test_dagster.py
 └── data/
 ```
 
@@ -176,6 +177,47 @@ Every test in dukastack exists because a failure mode justified it. The simulato
 | **C4** | Duplicate customer row | Duplicate row with matching `customer_id` and `updated_at` | `unique` test on `stg_customers.customer_id` | error |
 | **C5** | Overpaid order | Payments total exceeds line items sum | `assert_payments_within_order_total` | error |
 | **C6** | Skipped day | Advances 2 days with same customer changing tier on both | Dagster freshness check on `snap_customers` | warn |
+
+---
+
+## Orchestration & Asset Checks (Dagster)
+
+dukastack utilizes **Dagster** for end-to-end asset orchestration, scheduling, and data quality checks:
+
+- **Software-Defined Assets**: Maps the Python POS event simulator advancement step (`raw.*` multi-asset) directly into dbt staging views, snapshots, core star schema facts/dimensions, and business marts.
+- **Data Quality Asset Checks**:
+  - **Row Count Parity**: 7 checks verifying that row counts in `staging.stg_*` strictly reconcile with operational tables in `raw.*`.
+  - **Snapshot Freshness**: Verifies that `snap_customers` and `snap_products` timestamps track source mutations, flagging a warning if pipeline lag exceeds 24 hours (Chaos Scenario C6).
+- **Daily Schedule**: Automates daily event generation and full downstream builds at midnight (`0 0 * * *`).
+
+```bash
+# Start Dagster UI locally
+make dagster
+```
+
+---
+
+## Quickstart
+
+Clone to green in 5 commands:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/paulakelo/dukastack.git
+cd dukastack
+
+# 2. Setup virtual environment and dependencies
+make setup
+
+# 3. Generate history and advance 14 days with dbt builds
+make demo
+
+# 4. Run test suite (determinism, chaos tests, and Dagster asset checks)
+make test
+
+# 5. Launch Dagster webserver
+make dagster
+```
 
 ---
 
