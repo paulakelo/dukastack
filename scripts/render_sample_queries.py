@@ -67,7 +67,12 @@ def parse_query_file(file_path: Path) -> tuple[dict[str, str], str]:
             in_notes = False
             sql_lines.append(line)
 
-    metadata["notes"] = "\n".join(f"- {n}" for n in notes_lines if n)
+    clean_notes = []
+    for n in notes_lines:
+        if n:
+            clean_n = n.lstrip("0123456789. ")
+            clean_notes.append(f"- {clean_n}")
+    metadata["notes"] = "\n".join(clean_notes)
     sql_code = "\n".join(sql_lines).strip()
     return metadata, sql_code
 
@@ -130,6 +135,7 @@ def main() -> None:
             section_md.extend(
                 [
                     "**What to look for:**",
+                    "",
                     metadata["notes"],
                     "",
                 ]
@@ -141,7 +147,7 @@ def main() -> None:
                 sql_code,
                 "```",
                 "",
-                "### Results (Top 10 rows)",
+                f"### Results for {query_id} (Top 10 rows)",
                 "",
                 format_markdown_table(headers, rows),
                 "",
