@@ -1,0 +1,78 @@
+version: 2
+
+exposures:
+  - name: bq1_shop_revenue_and_margin
+    label: "BQ-1: Shop and Product Revenue & Margin"
+    type: dashboard
+    maturity: high
+    url: "https://github.com/paulakelo/dukastack"
+    description: >
+      Monitors net sales revenue, daily shop performance, refunds reconciliation,
+      and product volume & gross revenue across retail dukas.
+    depends_on:
+      - ref('mrt_daily_sales')
+      - ref('mrt_product_perf')
+      - ref('fct_order_items')
+    owner:
+      name: "Finance & Retail Operations"
+      email: "finance@dukastack.internal"
+
+  - name: bq2_stockout_risk
+    label: "BQ-2: Stockout Risk & Inventory Velocity"
+    type: analysis
+    maturity: high
+    url: "https://github.com/paulakelo/dukastack"
+    description: >
+      Evaluates high-velocity SKUs and sales velocity patterns across shop locations
+      to identify inventory depletion and stockout risk before replenishment.
+    depends_on:
+      - ref('mrt_product_perf')
+      - ref('mrt_daily_sales')
+    owner:
+      name: "Inventory & Merchandising"
+      email: "inventory@dukastack.internal"
+
+  - name: bq3_price_change_impact
+    label: "BQ-3: Price Change Impact (SCD2 Elasticity)"
+    type: analysis
+    maturity: high
+    url: "https://github.com/paulakelo/dukastack"
+    description: >
+      Measures shift in units sold and gross revenue before and after catalog price
+      revisions, leveraging SCD Type 2 point-in-time price versioning.
+    depends_on:
+      - ref('mrt_product_perf')
+      - ref('dim_products')
+    owner:
+      name: "Pricing & Merchandising Strategy"
+      email: "pricing@dukastack.internal"
+
+  - name: bq4_slow_movers
+    label: "BQ-4: Slow Movers & Low-Velocity Catalog"
+    type: dashboard
+    maturity: high
+    url: "https://github.com/paulakelo/dukastack"
+    description: >
+      Identifies stagnant catalog products exhibiting low order counts and unit sales
+      across active retail price windows.
+    depends_on:
+      - ref('mrt_product_perf')
+    owner:
+      name: "Category Merchandising"
+      email: "merchandising@dukastack.internal"
+
+  - name: bq5_data_freshness
+    label: "BQ-5: Data Freshness & Pipeline Latency"
+    type: dashboard
+    maturity: high
+    url: "https://github.com/paulakelo/dukastack"
+    description: >
+      Tracks ingestion recency, snapshot update continuity, and daily sales reconciliation
+      to detect pipeline lag or skipped synchronization intervals.
+    depends_on:
+      - ref('mrt_daily_sales')
+      - ref('snap_customers')
+      - ref('snap_products')
+    owner:
+      name: "Data Engineering"
+      email: "dataeng@dukastack.internal"

@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: dim_shops
-    description: "Physical retail shops (dukas) dimension, modeled as Type 1 SCD."
+    description: "Physical retail shops (dukas) dimension, modeled as Type 1 SCD. GRAIN: One row per physical retail shop location (shop_id)."
     columns:
       - name: shop_sk
         description: "Surrogate key generated from shop_id."
@@ -27,7 +27,7 @@ models:
           - not_null
 
   - name: dim_customers
-    description: "Customer loyalty tier dimension, tracked with SCD Type 2 point-in-time validity."
+    description: "Customer loyalty tier dimension, tracked with SCD Type 2 point-in-time validity. GRAIN: One row per customer loyalty tier version (customer_id + valid_from)."
     columns:
       - name: customer_sk
         description: "Surrogate key hashed from customer_id and valid_from."
@@ -64,7 +64,7 @@ models:
           - not_null
 
   - name: dim_products
-    description: "Retail product dimension, tracked with SCD Type 2 point-in-time price history."
+    description: "Retail product dimension, tracked with SCD Type 2 point-in-time price history. GRAIN: One row per product SKU price version (product_id + valid_from)."
     columns:
       - name: product_sk
         description: "Surrogate key hashed from product_id and valid_from."
@@ -99,7 +99,7 @@ models:
           - not_null
 
   - name: dim_date
-    description: "Calendar date spine dimension supporting daily time-series analysis."
+    description: "Calendar date spine dimension supporting daily time-series analysis. GRAIN: One row per calendar day (date_key / date_day)."
     columns:
       - name: date_key
         description: "Calendar date primary key (YYYY-MM-DD)."
@@ -144,7 +144,7 @@ models:
           - not_null
 
   - name: fct_order_items
-    description: "Point-of-sale line item sales transactions enriched with point-in-time dimensions via as-of joins."
+    description: "Point-of-sale line item sales transactions enriched with point-in-time dimensions via as-of joins. GRAIN: One row per individual customer order line item (order_item_id)."
     columns:
       - name: order_item_id
         description: "Primary key identifying each individual sales line item."
@@ -213,7 +213,7 @@ models:
           - not_null
 
   - name: fct_refunds
-    description: "Item returns and customer refund events, modeled as an immutable incremental fact."
+    description: "Item returns and customer refund events, modeled as an immutable incremental fact. GRAIN: One row per refund transaction (refund_id), referencing a specific order line item."
     columns:
       - name: refund_id
         description: "Primary key identifying each refund transaction."

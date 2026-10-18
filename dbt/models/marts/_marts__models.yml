@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: mrt_daily_sales
-    description: "Daily sales and refund reconciliation mart aggregating transactions per retail shop."
+    description: "Daily sales and refund reconciliation mart aggregating transactions per retail shop. GRAIN: One row per shop per order date (daily_sales_sk = shop_id + order_date)."
     columns:
       - name: daily_sales_sk
         description: "Surrogate key hashed from shop_id and order_date."
@@ -61,7 +61,7 @@ models:
           - not_null
 
   - name: mrt_product_perf
-    description: "Product performance mart tracking volume and revenue per SCD2 price version."
+    description: "Product performance mart tracking volume and revenue per SCD2 price version. GRAIN: One row per product SCD2 price version (product_sk = product_id + price_valid_from)."
     columns:
       - name: product_sk
         description: "Surrogate key referencing the specific SCD2 price version in dim_products."
@@ -111,7 +111,7 @@ models:
           - not_null
 
   - name: mrt_tier_moves
-    description: "Customer loyalty tier transition mart tracking customer spend per SCD2 tier window."
+    description: "Customer loyalty tier transition mart tracking customer spend per SCD2 tier window. GRAIN: One row per customer SCD2 loyalty tier window (customer_sk = customer_id + valid_from_ts)."
     columns:
       - name: customer_sk
         description: "Surrogate key referencing the specific SCD2 tier version in dim_customers."

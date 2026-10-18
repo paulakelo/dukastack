@@ -1,4 +1,4 @@
-.PHONY: help setup demo build chaos docs dagster lint test fmt clean
+.PHONY: help setup demo build chaos docs docs-serve dagster lint test fmt clean
 
 PYTHON ?= python3.11
 VENV ?= .venv
@@ -10,7 +10,8 @@ help:
 	@echo "  make demo     - Generate history and advance 14 days with dbt builds"
 	@echo "  make build    - Run dbt build (snapshots, models, tests)"
 	@echo "  make chaos    - Inject chaos scenarios C1-C6 and run tests"
-	@echo "  make docs     - Generate and serve dbt documentation"
+	@echo "  make docs        - Generate dbt documentation artifacts"
+	@echo "  make docs-serve  - Serve dbt documentation locally"
 	@echo "  make dagster  - Start Dagster UI"
 	@echo "  make lint     - Run ruff and sqlfluff linters"
 	@echo "  make test     - Run pytest suite"
@@ -46,6 +47,8 @@ chaos:
 
 docs:
 	$(BIN)/dbt docs generate --project-dir dbt --profiles-dir dbt
+
+docs-serve:
 	$(BIN)/dbt docs serve --project-dir dbt --profiles-dir dbt
 
 dagster:
