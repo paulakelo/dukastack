@@ -5,6 +5,16 @@ on:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   lint-and-test:
@@ -58,3 +68,47 @@ jobs:
 
       - name: Verify chaos scenarios (C1-C6)
         run: make chaos
+
+  publish-docs:
+    name: Build & Publish dbt Docs to GitHub Pages
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[dev]"
+          dbt deps --project-dir dbt --profiles-dir dbt
+
+      - name: Seed warehouse and generate dbt docs
+        run: |
+          python -m simulator.cli generate --days 14 --seed 42
+          dbt docs generate --project-dir dbt --profiles-dir dbt
+          mkdir -p public
+          cp -r dbt/target/* public/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
