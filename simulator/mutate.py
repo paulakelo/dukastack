@@ -21,13 +21,15 @@ from simulator.config import (
 )
 
 
-def advance_day(state: dict[str, Any], rng: random.Random) -> dict[str, Any]:
-    """
-    Advance the simulated clock by one full day and execute daily business mutations:
+def advance_day(
+    state: dict[str, Any], rng: random.Random, mutate_dimensions: bool = True
+) -> dict[str, Any]:
+    """Advance the simulated clock by one full day and execute daily business mutations:
+
     1. Create the day's orders, order items, and payments.
     2. Move yesterday's placed orders to completed.
-    3. Change loyalty tier for a share of customers.
-    4. Change unit price for a share of products.
+    3. Change loyalty tier for a share of customers (if mutate_dimensions=True).
+    4. Change unit price for a share of products (if mutate_dimensions=True).
     5. Create late refunds against orders up to 7 days old.
     6. Stamp every touched row with updated_at from the simulated clock.
     """
@@ -45,26 +47,27 @@ def advance_day(state: dict[str, Any], rng: random.Random) -> dict[str, Any]:
             order["order_status"] = "completed"
             order["updated_at"] = current_sim_time
 
-    # 2. Change customer loyalty tiers
-    for cust in state["customers"]:
-        if rng.random() < DAILY_CUSTOMER_TIER_CHANGE_PROB:
-            current_tier = cust["loyalty_tier"]
-            other_tiers = [t for t in LOYALTY_TIERS if t != current_tier]
-            cust["loyalty_tier"] = rng.choice(other_tiers)
-            cust["updated_at"] = current_sim_time
+    if mutate_dimensions:
+        # 2. Change customer loyalty tiers
+        for cust in state["customers"]:
+            if rng.random() < DAILY_CUSTOMER_TIER_CHANGE_PROB:
+                current_tier = cust["loyalty_tier"]
+                other_tiers = [t for t in LOYALTY_TIERS if t != current_tier]
+                cust["loyalty_tier"] = rng.choice(other_tiers)
+                cust["updated_at"] = current_sim_time
 
-    # 3. Fluctuate product unit prices
-    for prod in state["products"]:
-        if rng.random() < WEEKLY_PRODUCT_PRICE_CHANGE_PROB:
-            current_price = Decimal(str(prod["unit_price_kes"]))
-            # Fluctuate by -15% to +20%, rounding to nearest 5 KES
-            delta_pct = Decimal(str(rng.randint(-15, 20))) / Decimal("100")
-            new_price = current_price * (Decimal("1") + delta_pct)
-            # Round to nearest 5 KES, minimum 20 KES
-            rounded_units = (new_price / Decimal("5")).quantize(Decimal("1"))
-            new_price = max(Decimal("20.00"), rounded_units * Decimal("5.00"))
-            prod["unit_price_kes"] = new_price
-            prod["updated_at"] = current_sim_time
+        # 3. Fluctuate product unit prices
+        for prod in state["products"]:
+            if rng.random() < WEEKLY_PRODUCT_PRICE_CHANGE_PROB:
+                current_price = Decimal(str(prod["unit_price_kes"]))
+                # Fluctuate by -15% to +20%, rounding to nearest 5 KES
+                delta_pct = Decimal(str(rng.randint(-15, 20))) / Decimal("100")
+                new_price = current_price * (Decimal("1") + delta_pct)
+                # Round to nearest 5 KES, minimum 20 KES
+                rounded_units = (new_price / Decimal("5")).quantize(Decimal("1"))
+                new_price = max(Decimal("20.00"), rounded_units * Decimal("5.00"))
+                prod["unit_price_kes"] = new_price
+                prod["updated_at"] = current_sim_time
 
     # 4. Generate new day's orders, items, and payments
     num_orders = rng.randint(MIN_DAILY_ORDERS, MAX_DAILY_ORDERS)

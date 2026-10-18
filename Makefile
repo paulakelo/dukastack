@@ -29,7 +29,9 @@ setup:
 	@echo "Setup complete. Activate with: source $(VENV)/bin/activate"
 
 demo:
+	rm -f data/*.duckdb* data/*.json data/*.parquet
 	$(BIN)/python -m simulator.cli generate --days 30
+	$(BIN)/dbt build --project-dir dbt --profiles-dir dbt
 	@for i in $$(seq 1 14); do \
 		echo "Advancing simulated day $$i/14..."; \
 		$(BIN)/python -m simulator.cli advance; \

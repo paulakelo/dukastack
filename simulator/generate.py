@@ -183,7 +183,7 @@ def generate_history(
     state, rng = create_initial_state(seed=seed)
 
     for _ in range(days):
-        advance_day(state, rng)
+        advance_day(state, rng, mutate_dimensions=False)
 
     # Save state and write to DuckDB
     save_state(state, state_path=state_path)
