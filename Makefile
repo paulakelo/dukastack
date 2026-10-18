@@ -1,4 +1,4 @@
-.PHONY: help setup demo build chaos docs docs-serve dagster lint test fmt clean
+.PHONY: help setup demo demo-fail demo-recover build chaos docs docs-serve dagster lint test fmt clean
 
 PYTHON ?= python3.11
 VENV ?= .venv
@@ -6,16 +6,19 @@ BIN = $(VENV)/bin
 
 help:
 	@echo "dukastack Makefile targets:"
-	@echo "  make setup    - Create virtualenv and install dependencies"
-	@echo "  make demo     - Generate history and advance 14 days with dbt builds"
-	@echo "  make build    - Run dbt build (snapshots, models, tests)"
-	@echo "  make chaos    - Inject chaos scenarios C1-C6 and run tests"
-	@echo "  make docs        - Generate dbt documentation artifacts"
-	@echo "  make docs-serve  - Serve dbt documentation locally"
-	@echo "  make dagster  - Start Dagster UI"
-	@echo "  make lint     - Run ruff and sqlfluff linters"
-	@echo "  make test     - Run pytest suite"
-	@echo "  make fmt      - Format Python and SQL files"
+	@echo "  make setup        - Create virtualenv and install dependencies"
+	@echo "  make demo         - Generate seeded 30-day history and run full warehouse build"
+	@echo "  make demo-fail    - Inject bad dataset causing test failure and blocking marts"
+	@echo "  make demo-recover - Remove bad dataset, re-run build, and verify recovery"
+	@echo "  make build        - Run dbt build (snapshots, models, tests)"
+	@echo "  make chaos        - Inject chaos scenarios C1-C6 and run tests"
+	@echo "  make docs         - Generate dbt documentation artifacts"
+	@echo "  make docs-serve   - Serve dbt documentation locally"
+	@echo "  make dagster      - Start Dagster UI"
+	@echo "  make lint         - Run ruff and sqlfluff linters"
+	@echo "  make test         - Run pytest suite"
+	@echo "  make fmt          - Format Python and SQL files"
+	@echo "  make clean        - Remove generated data and build artifacts"
 
 setup:
 	@if command -v uv >/dev/null 2>&1; then \
@@ -31,13 +34,20 @@ setup:
 
 demo:
 	rm -f data/*.duckdb* data/*.json data/*.parquet
-	$(BIN)/python -m simulator.cli generate --days 30
+	$(BIN)/python -m simulator.cli generate --days 30 --seed 42
 	$(BIN)/dbt build --project-dir dbt --profiles-dir dbt
-	@for i in $$(seq 1 14); do \
-		echo "Advancing simulated day $$i/14..."; \
-		$(BIN)/python -m simulator.cli advance; \
-		$(BIN)/dbt build --project-dir dbt --profiles-dir dbt; \
-	done
+	@echo ""
+	@echo "========================================================================"
+	@echo "dukastack demo warehouse ready!"
+	@echo "  - dbt Docs: Run 'make docs-serve' (opens at http://localhost:8080 or port shown)"
+	@echo "  - Dagster UI: Run 'make dagster'   (opens at http://localhost:3000)"
+	@echo "========================================================================"
+
+demo-fail:
+	$(BIN)/python scripts/demo_chaos.py fail
+
+demo-recover:
+	$(BIN)/python scripts/demo_chaos.py recover
 
 build:
 	$(BIN)/dbt build --project-dir dbt --profiles-dir dbt
@@ -52,6 +62,7 @@ docs-serve:
 	$(BIN)/dbt docs serve --project-dir dbt --profiles-dir dbt
 
 dagster:
+	mkdir -p .dagster
 	DAGSTER_HOME=$$(pwd)/.dagster $(BIN)/dagster dev -f orchestration/dukastack_dagster/definitions.py
 
 lint:

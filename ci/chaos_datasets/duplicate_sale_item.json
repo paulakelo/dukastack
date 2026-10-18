@@ -1,0 +1,8 @@
+{
+  "order_item_id": "ITM-00000001",
+  "order_id": "ORD-00000001",
+  "product_id": "PRD-0001",
+  "quantity": 1,
+  "discount_kes": 0.0,
+  "description": "Known-bad duplicate sale item record injected to verify pipeline failure modes and block downstream mart materialization."
+}
