@@ -1,4 +1,4 @@
-.PHONY: help setup demo demo-fail demo-recover build chaos docs docs-serve dagster lint test fmt clean
+.PHONY: help setup demo demo-fail demo-recover build chaos docs docs-serve dagster queries lint test fmt clean
 
 PYTHON ?= python3.11
 VENV ?= .venv
@@ -15,6 +15,7 @@ help:
 	@echo "  make docs         - Generate dbt documentation artifacts"
 	@echo "  make docs-serve   - Serve dbt documentation locally"
 	@echo "  make dagster      - Start Dagster UI"
+	@echo "  make queries      - Execute sample queries and update docs/sample_queries.md"
 	@echo "  make lint         - Run ruff and sqlfluff linters"
 	@echo "  make test         - Run pytest suite"
 	@echo "  make fmt          - Format Python and SQL files"
@@ -64,6 +65,9 @@ docs-serve:
 dagster:
 	mkdir -p .dagster
 	DAGSTER_HOME=$$(pwd)/.dagster $(BIN)/dagster dev -f orchestration/dukastack_dagster/definitions.py
+
+queries:
+	$(BIN)/python scripts/render_sample_queries.py
 
 lint:
 	$(BIN)/ruff check .
